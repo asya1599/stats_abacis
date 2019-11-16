@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics Cheat Sheet</title>
+    <script src="jquery-directory.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <style>
+        body {
+            background-color: cadetblue;
+            color: saddlebrown;
+        }
+
+        h1 {
+            font-family: Georgia, fantasy;
+        }
+
+        #big_box {
+            size: auto;
+        }
+
+        #prompt {
+            display: flex;
+            place-content: center;
+        }
+
+        #giveMeAnswers,
+        #attachHere {
+            display: flex;
+            place-content: center;
+
+        }
+
+        #tester {
+            display: flex;
+            place-content: center;
+            justify-content: space-evenly;
+        }
+
+        #rounded {
+            display: flex;
+            flex-direction: column;
+            place-content: center;
+        }
+
+        #image {
+            display: flex;
+            place-self: center;
+        }
+
+        #abacus {
+            height: 260px;
+            width: 150px;
+            padding-left: 15px;
+            border-bottom: 5px solid wheat;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+        #abacus-holder {
+            place-content: right;
+            text-align: center;
+        }
+
+        tr {
+            background-color: wheat;
+            border: 1px solid tan;
+            display: inline-block;
+            margin-right: 20px;
+            height: 150px;
+            margin-bottom: -3px;
+            width: 6px;
+            padding-top: 100px;
+        }
+
+        td {
+            margin-left: -8px;
+            height: 15px;
+            width: 20px;
+            position: relative;
+            background-color: red;
+            display: block;
+            border-radius: 15px;
+            -webkit-box-shadow: inset 10px 10px 8px -5px rgba(252, 171, 171, 0.6), inset -10px -10px 8px -6px rgba(176, 65, 65, 0.91);
+            -moz-box-shadow: inset 10px 10px 8px -5px rgba(252, 171, 171, 0.6), inset -10px -10px 8px -6px rgba(176, 65, 65, 0.91);
+            box-shadow: inset 10px 10px 8px -5px rgba(252, 171, 171, 0.6), inset -10px -10px 8px -6px rgba(176, 65, 65, 0.91);
+        }
+
+        #sum {
+            display: inline-block;
+            width: 50px;
+            height: 20px;
+            font-family: sans-serif;
+            font-size: 12px;
+            padding-top: 7px;
+            justify-self: center;
+            border: 1px solid grey;
+        }
+
+        #button_and_text {
+            display: flex;
+            flex: 3;
+            flex-direction: column;
+            justify-items: space-evenly;
+        }
+
+        #submission {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+    
+        } #align{
+            display: flex;
+            flex-direction: column;
+        } 
+    </style>
+
+</head>
+
+<body>
+    <div id="big_box">
+        <div id="prompt">
+            <h1>Enter your data points (separated by commas) and click calculate </h1>
+        </div>
+        <div id="tester">
+            <div id="submission">
+                <div id="button_and_text">
+                    <input id="numbers" type="text">
+                    <button id="computerCrunchThoseNumbers" type="button">
+                        <div id="pee">Calculate Stats</div>
+                    </button>
+                </div>
+
+                <div id="rounded">
+                    Rounded to how many decimal places?
+                    <select id="select" required="required">
+                        <p> </p>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+
+                </div>
+                <br><br>
+            </div>
+            <div id="align">
+            Try writing your answer to zero decimal places using this abacus!
+            <div id="abacus-holder">
+                <table id="abacus">
+                        <tr>
+                                <td data-attribute="100"></td>
+                                <td data-attribute="100"></td>
+                                <td data-attribute="100"></td>
+                                <td data-attribute="100"></td>
+                                <td data-attribute="100"></td>
+                                <td data-attribute="100"></td>
+                                <td data-attribute="100"></td>
+                                <td data-attribute="100"></td>
+                                <td data-attribute="100"></td>
+                            </tr>
+                    <tr>
+                        <td data-attribute="10"></td>
+                        <td data-attribute="10"></td>
+                        <td data-attribute="10"></td>
+                        <td data-attribute="10"></td>
+                        <td data-attribute="10"></td>
+                        <td data-attribute="10"></td>
+                        <td data-attribute="10"></td>
+                        <td data-attribute="10"></td>
+                        <td data-attribute="10"></td>
+                    </tr>
+                    <tr>
+                        <td data-attribute="1"></td>
+                        <td data-attribute="1"></td>
+                        <td data-attribute="1"></td>
+                        <td data-attribute="1"></td>
+                        <td data-attribute="1"></td>
+                        <td data-attribute="1"></td>
+                        <td data-attribute="1"></td>
+                        <td data-attribute="1"></td>
+                        <td data-attribute="1"></td>
+                    </tr>       
+                </table>
+                <div id="sum">0</div>
+                <a title="abacus" href="https://www.youtube.com/watch?v=SYRyKYmOJwM">What is an abacus?</a>
+            </div>
+        </div>
+    </div>
+
+        <H2 id="giveMeAnswers">Results</H2>
+        <div id="attachHere"> </div>
+        <script>
+
+            function mean(arr) {
+                let roundedAverage;
+                let total = 0;
+                for (let i = 0; i < arr.length; i++) {
+                    total += arr[i];
+                }
+                let average = total / arr.length;
+                let roundedChoice = parseInt($("#select").val());
+
+                if (roundedChoice == 1) {
+                    roundedAverage = average.toFixed(1);
+                } else if (roundedChoice == 2) {
+                    roundedAverage = average.toFixed(2);
+                } else {
+                    roundedAverage = average.toFixed(3);
+                }
+                return roundedAverage;
+            }
+
+            function standardDeviation(arr) {
+                let answerRounded;
+                let avg = mean(arr);
+                let squareDiffs = arr.map(function (value) {
+                    let diff = value - avg;
+                    let sqrDiff = diff * diff;
+                    return sqrDiff;
+                });
+
+                let avgSquareDiff = mean(squareDiffs);
+                let standardDev = Math.sqrt(avgSquareDiff);
+
+                let roundedChoice = parseInt($("#select").val());
+
+                if (roundedChoice == 1) {
+                    answerRounded = standardDev.toFixed(1);
+                } else if (roundedChoice == 2) {
+                    answerRounded = standardDev.toFixed(2);
+                } else {
+                    answerRounded = standardDev.toFixed(3);
+                }
+                return answerRounded;
+            }
+
+
+            function calculateValues() {
+                let user_values = document.getElementById("numbers").value;
+                let user_array = user_values.split(",").map(Number);
+                let meanValueAns = mean(user_array);
+                let stDevAns = standardDeviation(user_array);
+                return "The mean is " + meanValueAns + " and the stdev is " + stDevAns + ".";
+            }
+            $("#computerCrunchThoseNumbers").click(function () {
+                $("#attachHere").append(" " + calculateValues() + "");
+            });
+
+            $('#computerCrunchThoseNumbers').click(
+                function () {
+                    $("input:text").val('');
+                });
+            $("#computerCrunchThoseNumbers").click(
+                function () {
+                    $("#pee", this).replaceWith("Re-calculate Stats");
+                });
+    
+            var sum = [];
+            var total = 0;
+
+            $("td").draggable({
+                axis: 'y',
+                containment: 'table',
+                cursor: 'move',
+                grid: [0, 20],
+                stop: function (event, ui) {
+                    sum = [];
+                    $('td').each(function (i) {
+                        var Stoppos = $(this).position();
+                        var value = $(this).attr('data-attribute');
+                        if (Stoppos.top < 100) {
+                            sum.push(value);
+                            sumFunction();
+                        } else {
+                            sumFunction();
+                        }
+                    });
+                }
+            });
+
+            sumFunction = function () {
+                total = 0;
+                for (var i = 0; i < sum.length; i++) {
+                    total += sum[i] << 0.000;
+                }
+                $('#sum').text(total);
+            }
+
+
+
+
+        </script>
+
+
+
+</body>
+
+</html>
